@@ -63,7 +63,7 @@
 
           <h2 class="section-title" :style="s.sectionTitle">Ready</h2>
           <p class="section-desc" :style="s.sectionDesc">
-            Local prediction engine on standby. Upload unstructured data to initialize a simulation.
+            Simulation engine ready. Upload one or more documents to initialize a simulation.
           </p>
 
           <div class="metrics-row" :style="s.metricsRow">
@@ -132,7 +132,7 @@
               </div>
               <div :style="s.inputWrapper">
                 <textarea v-model="formData.simulationRequirement" :style="s.codeInput" placeholder="// Describe your simulation or prediction goal in natural language" rows="6" :disabled="loading"></textarea>
-                <div :style="s.modelBadge">Engine: Ollama + Neo4j (local)</div>
+                <div :style="s.modelBadge">{{ $brand }}</div>
               </div>
             </div>
 
