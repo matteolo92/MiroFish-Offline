@@ -16,6 +16,12 @@ services:
       - FLASK_DEBUG=false
       - SECRET_KEY=${SECRET_KEY}
       - OASIS_DEFAULT_MAX_ROUNDS=10
+      - VITE_BRAND_NAME=${BRAND_NAME:-Simulation Lab}
+      - VITE_BRAND_TAGLINE=${BRAND_TAGLINE:-Multi-Agent Simulation Engine}
+      - VITE_SOURCE_URL=${SOURCE_URL:-}
+    labels:
+      # Password davanti al sito: middleware definito in Coolify (Proxy > Dynamic Configurations)
+      - coolify.traefik.middlewares=simulation-auth@file
     volumes:
       - mirofish_uploads:/app/backend/uploads
     depends_on:

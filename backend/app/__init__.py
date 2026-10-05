@@ -83,7 +83,7 @@ def create_app(config_class=Config):
     # Health check
     @app.route('/health')
     def health():
-        return {'status': 'ok', 'service': 'MiroFish-Offline Backend'}
+        return {'status': 'ok', 'service': 'Simulation Backend'}
 
     if should_log_startup:
         logger.info("MiroFish-Offline Backend startup complete")
