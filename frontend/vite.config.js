@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     port: 3000,
     open: false,
-    allowedHosts: ['mirofish.filosa.eu'],
+    allowedHosts: ['simulation.filosa.eu'],
     proxy: {
       '/api': {
         target: 'http://localhost:5001',
