@@ -21,6 +21,7 @@ from openai import OpenAI
 from ..config import Config
 from ..utils.logger import get_logger
 from .entity_reader import EntityNode
+from ..utils.llm_client import json_mode_kwargs, clean_json_text
 
 logger = get_logger('mirofish.simulation_config')
 
@@ -445,12 +446,12 @@ class SimulationConfigGenerator:
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": prompt}
                     ],
-                    response_format={"type": "json_object"},
+                    **json_mode_kwargs(self.client.base_url),
                     temperature=0.7 - (attempt * 0.1)  # Lower temperature with each retry
                     # Don't set max_tokens, let LLM generate freely
                 )
 
-                content = response.choices[0].message.content
+                content = clean_json_text(response.choices[0].message.content)
                 finish_reason = response.choices[0].finish_reason
 
                 # Check if output was truncated

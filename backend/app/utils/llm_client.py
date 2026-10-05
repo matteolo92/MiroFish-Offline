@@ -13,6 +13,35 @@ from openai import OpenAI
 from ..config import Config
 
 
+def is_anthropic(base_url) -> bool:
+    """True quando l'endpoint e' l'API compatibile OpenAI di Anthropic (Claude)."""
+    return 'anthropic.com' in str(base_url or '')
+
+
+def json_mode_kwargs(base_url) -> Dict[str, Any]:
+    """Parametri per chiedere JSON al modello.
+
+    L'endpoint compatibile OpenAI di Anthropic rifiuta response_format
+    {"type": "json_object"} (accetta solo json_schema) e richiede max_tokens:
+    con Claude il JSON viene chiesto dal prompt e ripulito in clean_json_text().
+    """
+    if is_anthropic(base_url):
+        return {"max_tokens": 16000}
+    return {"response_format": {"type": "json_object"}}
+
+
+def clean_json_text(content: str) -> str:
+    """Toglie i blocchi ```json e l'eventuale testo prima/dopo l'oggetto JSON."""
+    text = (content or '').strip()
+    text = re.sub(r'^```(?:json)?\s*\n?', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'\n?```\s*$', '', text).strip()
+    if text and text[0] not in '{[':
+        start, end = text.find('{'), text.rfind('}')
+        if start != -1 and end > start:
+            text = text[start:end + 1]
+    return text
+
+
 class LLMClient:
     """LLM Client"""
 
@@ -70,7 +99,7 @@ class LLMClient:
             "max_tokens": max_tokens,
         }
 
-        if response_format:
+        if response_format and not is_anthropic(self.base_url):
             kwargs["response_format"] = response_format
 
         # For Ollama: pass num_ctx via extra_body to prevent prompt truncation
@@ -108,11 +137,8 @@ class LLMClient:
             max_tokens=max_tokens,
             response_format={"type": "json_object"}
         )
-        # Clean markdown code block markers
-        cleaned_response = response.strip()
-        cleaned_response = re.sub(r'^```(?:json)?\s*\n?', '', cleaned_response, flags=re.IGNORECASE)
-        cleaned_response = re.sub(r'\n?```\s*$', '', cleaned_response)
-        cleaned_response = cleaned_response.strip()
+        # Clean markdown code block markers and any text around the JSON
+        cleaned_response = clean_json_text(response)
 
         try:
             return json.loads(cleaned_response)

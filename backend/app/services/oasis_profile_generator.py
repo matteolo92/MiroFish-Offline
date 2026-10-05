@@ -21,6 +21,7 @@ from ..config import Config
 from ..utils.logger import get_logger
 from .entity_reader import EntityNode
 from ..storage import GraphStorage
+from ..utils.llm_client import json_mode_kwargs, clean_json_text
 
 logger = get_logger('mirofish.oasis_profile')
 
@@ -477,12 +478,12 @@ class OasisProfileGenerator:
                         {"role": "system", "content": self._get_system_prompt(is_individual)},
                         {"role": "user", "content": prompt}
                     ],
-                    response_format={"type": "json_object"},
+                    **json_mode_kwargs(self.client.base_url),
                     temperature=0.7 - (attempt * 0.1)  # Lower temperature with each retry
                     # Don't set max_tokens, let LLM generate freely
                 )
 
-                content = response.choices[0].message.content
+                content = clean_json_text(response.choices[0].message.content)
 
                 # Check if output was truncated (finish_reason is not 'stop')
                 finish_reason = response.choices[0].finish_reason
