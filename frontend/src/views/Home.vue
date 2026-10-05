@@ -2,10 +2,10 @@
   <div class="home-container">
     <!-- Top Navigation Bar -->
     <nav class="navbar" :style="s.navbar">
-      <div class="nav-brand" :style="s.navBrand">MIROFISH OFFLINE</div>
+      <div class="nav-brand" :style="s.navBrand">{{ $brand }}</div>
       <div class="nav-links" :style="s.navLinks">
-        <a href="https://github.com/nikmcfly/MiroFish-Offline" target="_blank" class="github-link" :style="s.githubLink">
-          Visit our Github <span>↗</span>
+        <a v-if="$sourceUrl" :href="$sourceUrl" target="_blank" rel="noopener" class="github-link" :style="s.githubLink">
+          Source code <span>↗</span>
         </a>
       </div>
     </nav>
@@ -15,8 +15,7 @@
       <section class="hero-section" :style="s.heroSection">
         <div class="hero-left" :style="s.heroLeft">
           <div class="tag-row" :style="s.tagRow">
-            <span class="orange-tag" :style="s.orangeTag">Offline Multi-Agent Simulation Engine</span>
-            <span class="version-text" :style="s.versionText">/ v0.1-preview</span>
+            <span class="orange-tag" :style="s.orangeTag">{{ $brandTagline }}</span>
           </div>
 
           <h1 class="main-title" :style="s.mainTitle">
@@ -26,10 +25,10 @@
 
           <div class="hero-desc" :style="s.heroDesc">
             <p :style="s.heroDescP">
-              From a single document, <span :style="s.highlightBold">MiroFish Offline</span> extracts reality seeds and builds a parallel world of <span :style="s.highlightOrange">autonomous AI agents</span> — running entirely on your machine. Inject variables, observe emergent behavior, and find <span :style="s.highlightCode">"local optima"</span> in complex social dynamics.
+              From a single document, <span :style="s.highlightBold">{{ $brand }}</span> extracts entities and relationships and builds a parallel world of <span :style="s.highlightOrange">autonomous AI agents</span>. Inject variables, observe emergent behavior, and find <span :style="s.highlightCode">"local optima"</span> in complex social dynamics.
             </p>
             <p class="slogan-text" :style="s.sloganText">
-              Your data never leaves your machine. The future is simulated locally<span :style="s.blinkingCursor">_</span>
+              Rehearse a scenario before it happens<span :style="s.blinkingCursor">_</span>
             </p>
           </div>
 
@@ -38,7 +37,17 @@
 
         <div class="hero-right" :style="s.heroRight">
           <div class="logo-container" :style="s.logoContainer">
-            <img src="../assets/logo/MiroFish_logo_left.jpeg" alt="MiroFish Logo" :style="s.heroLogo" />
+            <svg viewBox="0 0 400 300" :style="s.heroLogo" role="img" :aria-label="$brand">
+              <g stroke="#FF6B35" stroke-width="2" opacity="0.8">
+                <line x1="80" y1="80" x2="220" y2="60"/><line x1="80" y1="80" x2="150" y2="200"/>
+                <line x1="220" y1="60" x2="150" y2="200"/><line x1="220" y1="60" x2="330" y2="130"/>
+                <line x1="150" y1="200" x2="300" y2="240"/><line x1="330" y1="130" x2="300" y2="240"/>
+                <line x1="220" y1="60" x2="300" y2="240"/>
+              </g>
+              <g fill="#111"><circle cx="80" cy="80" r="16"/><circle cx="220" cy="60" r="22"/>
+                <circle cx="150" cy="200" r="18"/><circle cx="330" cy="130" r="14"/><circle cx="300" cy="240" r="20"/></g>
+              <g fill="#FF6B35"><circle cx="220" cy="60" r="7"/><circle cx="300" cy="240" r="6"/></g>
+            </svg>
           </div>
           <button :style="s.scrollDownBtn" @click="scrollToBottom">↓</button>
         </div>
@@ -59,12 +68,12 @@
 
           <div class="metrics-row" :style="s.metricsRow">
             <div class="metric-card" :style="s.metricCard">
-              <div class="metric-value" :style="s.metricValue">Free</div>
-              <div class="metric-label" :style="s.metricLabel">Runs on your hardware</div>
+              <div class="metric-value" :style="s.metricValue">Self-hosted</div>
+              <div class="metric-label" :style="s.metricLabel">Graph and embeddings on your server</div>
             </div>
             <div class="metric-card" :style="s.metricCard">
-              <div class="metric-value" :style="s.metricValue">Private</div>
-              <div class="metric-label" :style="s.metricLabel">100% offline, no cloud</div>
+              <div class="metric-value" :style="s.metricValue">Multi-agent</div>
+              <div class="metric-label" :style="s.metricLabel">Social simulation with memory</div>
             </div>
           </div>
 
@@ -218,9 +227,9 @@ const s = reactive({
 })
 
 const steps = [
-  { num: '01', title: 'Graph Build', desc: 'Extract reality seeds from your document, build knowledge graph with Neo4j + GraphRAG' },
-  { num: '02', title: 'Env Setup', desc: 'Generate agent personas, configure simulation parameters via local Ollama LLM' },
-  { num: '03', title: 'Simulation', desc: 'Run multi-agent simulation locally with dynamic memory updates and emergent behavior' },
+  { num: '01', title: 'Graph Build', desc: 'Extract reality seeds from your document, build a knowledge graph' },
+  { num: '02', title: 'Env Setup', desc: 'Generate agent personas, configure simulation parameters' },
+  { num: '03', title: 'Simulation', desc: 'Run the multi-agent simulation with dynamic memory updates and emergent behavior' },
   { num: '04', title: 'Report', desc: 'ReportAgent analyzes the simulation results and generates a detailed prediction report' },
   { num: '05', title: 'Interaction', desc: 'Chat with any agent from the simulated world or discuss findings with ReportAgent' },
 ]
